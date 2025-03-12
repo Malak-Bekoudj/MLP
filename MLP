@@ -22,3 +22,22 @@ self.weights = [np.random.randn(layer_sizes[i + 1], layer_sizes[i]) * np.sqrt(2 
                         for i in range(len(layer_sizes) - 1)]
         self.biases = [np.zeros((layer_sizes[i + 1], 1)) for i in range(len(layer_sizes) - 1)]
 
+ def relu(self, Z):
+        return np.maximum(0, Z)
+
+    def sigmoid(self, Z):
+        return 1 / (1 + np.exp(-Z))
+
+    def forward_propagation(self, X):
+        A = X.T  
+        activations = [A]  
+ for i in range(len(self.weights)):
+            Z = np.dot(self.weights[i], A) + self.biases[i]
+            if i == len(self.weights) - 1:  
+                A = self.sigmoid(Z)  
+            else:
+                A = self.activation_func(Z)
+            activations.append(A)
+
+        return A, activations
+
