@@ -59,6 +59,15 @@ def sigmoid_derivative(self, Z):
         grads_w[-1] = np.dot(delta, activations[-2].T) / m
         grads_b[-1] = np.mean(delta, axis=1, keepdims=True)
 
+# Rétropropagation sur les couches cachées
+        for l in range(len(self.weights) - 2, -1, -1):
+            delta = np.dot(self.weights[l + 1].T, delta) * self.activation_derivative(zs[l])
+            grads_w[l] = np.dot(delta, activations[l].T) / m
+            grads_b[l] = np.mean(delta, axis=1, keepdims=True)
+
+        return grads_w, grads_b
+
+
 # ======== TEST DU MLP ========
 if __name__ == "__main__":
     mlp = MLP([3, 5, 3, 1], activation='relu')
