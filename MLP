@@ -1,0 +1,24 @@
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+
+file_path = "data.txt"  
+
+data = np.loadtxt(file_path)
+
+X = data[:, :-1]  
+y = data[:, -1]    
+
+
+scaler = StandardScaler()
+X = scaler.fit_transform(X)  
+print("Valeurs moyennes après normalisation :", np.mean(X, axis=0))
+print("Écart-type après normalisation :", np.std(X, axis=0))
+class MLP:
+    def __init__(self, layer_sizes, activation='relu'):
+        self.layer_sizes = layer_sizes
+        self.activation_func = self.relu if activation == 'relu' else self.sigmoid
+
+self.weights = [np.random.randn(layer_sizes[i + 1], layer_sizes[i]) * np.sqrt(2 / layer_sizes[i]) 
+                        for i in range(len(layer_sizes) - 1)]
+        self.biases = [np.zeros((layer_sizes[i + 1], 1)) for i in range(len(layer_sizes) - 1)]
+
