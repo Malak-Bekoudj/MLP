@@ -49,7 +49,10 @@ def sigmoid_derivative(self, Z):
 
         return A, activations, zs
 #RÉTROPROPAGATION & ENTRAÎNEMENT
-
+  def backward_propagation(self, X, y, activations, zs):
+        m = y.shape[0]
+        grads_w = [np.zeros(w.shape) for w in self.weights]
+        grads_b = [np.zeros(b.shape) for b in self.biases]
 
 
 # ======== TEST DU MLP ========
