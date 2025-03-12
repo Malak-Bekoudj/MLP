@@ -53,7 +53,11 @@ def sigmoid_derivative(self, Z):
         m = y.shape[0]
         grads_w = [np.zeros(w.shape) for w in self.weights]
         grads_b = [np.zeros(b.shape) for b in self.biases]
-
+# Calcul de l'erreur en sortie 
+        A_final = activations[-1]
+        delta = A_final - y.T  # Erreur (dernière couche)
+        grads_w[-1] = np.dot(delta, activations[-2].T) / m
+        grads_b[-1] = np.mean(delta, axis=1, keepdims=True)
 
 # ======== TEST DU MLP ========
 if __name__ == "__main__":
