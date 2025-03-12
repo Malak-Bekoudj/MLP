@@ -14,9 +14,12 @@ X = scaler.fit_transform(X)
 print("Valeurs moyennes après normalisation :", np.mean(X, axis=0))
 print("Écart-type après normalisation :", np.std(X, axis=0))
 class MLP:
-    def __init__(self, layer_sizes, activation='relu'):
+    def __init__(self, layer_sizes, activation='relu',learning_rate=0.01):
         self.layer_sizes = layer_sizes
+        self.learning_rate = learning_rate
         self.activation_func = self.relu if activation == 'relu' else self.sigmoid
+        self.activation_derivative = self.relu_derivative if activation == 'relu' else self.sigmoid_derivative
+
 
 self.weights = [np.random.randn(layer_sizes[i + 1], layer_sizes[i]) * np.sqrt(2 / layer_sizes[i]) 
                         for i in range(len(layer_sizes) - 1)]
@@ -24,13 +27,18 @@ self.weights = [np.random.randn(layer_sizes[i + 1], layer_sizes[i]) * np.sqrt(2 
 
  def relu(self, Z):
         return np.maximum(0, Z)
+def relu_derivative(self, Z):
+        return (Z > 0).astype(float)
 
-    def sigmoid(self, Z):
+def sigmoid(self, Z):
         return 1 / (1 + np.exp(-Z))
+def sigmoid_derivative(self, Z):
+        return self.sigmoid(Z) * (1 - self.sigmoid(Z))
 
     def forward_propagation(self, X):
         A = X.T  
         activations = [A]  
+        zs = [] 
  for i in range(len(self.weights)):
             Z = np.dot(self.weights[i], A) + self.biases[i]
             if i == len(self.weights) - 1:  
@@ -39,7 +47,10 @@ self.weights = [np.random.randn(layer_sizes[i + 1], layer_sizes[i]) * np.sqrt(2 
                 A = self.activation_func(Z)
             activations.append(A)
 
-        return A, activations
+        return A, activations, zs
+#RÉTROPROPAGATION & ENTRAÎNEMENT
+
+
 
 # ======== TEST DU MLP ========
 if __name__ == "__main__":
