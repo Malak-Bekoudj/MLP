@@ -41,3 +41,14 @@ self.weights = [np.random.randn(layer_sizes[i + 1], layer_sizes[i]) * np.sqrt(2 
 
         return A, activations
 
+# ======== TEST DU MLP ========
+if __name__ == "__main__":
+    mlp = MLP([3, 5, 3, 1], activation='relu')
+
+    output, activations = mlp.forward_propagation(X)
+
+print("Min:", np.min(output))
+print("Max:", np.max(output))
+print("Mean:", np.mean(output))
+print("Sortie du réseau (premiers 10 résultats) :")
+print(output[:, :10])  
