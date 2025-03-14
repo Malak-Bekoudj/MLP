@@ -97,3 +97,21 @@ print("Max:", np.max(output))
 print("Mean:", np.mean(output))
 print("Sortie du réseau (premiers 10 résultats) :")
 print(output[:, :10])  
+
+if __name__ == "__main__":
+    #Définition des données XOR
+    X_xor = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
+    y_xor = np.array([[0], [1], [1], [0]])  
+
+    #Création et entraînement du MLP
+    mlp_xor = MLP([2, 5, 1], activation='relu', learning_rate=0.1)
+
+    mlp_xor.train(X_xor, y_xor, epochs=5000)
+
+    #Test du réseau sur XOR
+    output_xor, _, _ = mlp_xor.forward_propagation(X_xor)
+
+    print("\nRésultats du test XOR :")
+    print("Entrées :\n", X_xor)
+    print("Sorties attendues :\n", y_xor.T)
+    print("Sorties du MLP :\n", np.round(output_xor))
