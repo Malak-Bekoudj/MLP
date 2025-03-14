@@ -92,7 +92,7 @@ if __name__ == "__main__":
     # Entraînement du réseau
     mlp.train(X, y, epochs=1000)
 
-    output, activations = mlp.forward_propagation(X)
+    output, activations, zs = mlp.forward_propagation(X)
 
     print("Min:", np.min(output))
     print("Max:", np.max(output))
