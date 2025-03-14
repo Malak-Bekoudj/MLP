@@ -19,28 +19,29 @@ class MLP:
         self.learning_rate = learning_rate
         self.activation_func = self.relu if activation == 'relu' else self.sigmoid
         self.activation_derivative = self.relu_derivative if activation == 'relu' else self.sigmoid_derivative
+        # Initialisation des poids et biais
 
-
-self.weights = [np.random.randn(layer_sizes[i + 1], layer_sizes[i]) * np.sqrt(2 / layer_sizes[i]) 
+        self.weights = [np.random.randn(layer_sizes[i + 1], layer_sizes[i]) * np.sqrt(2 / layer_sizes[i]) 
                         for i in range(len(layer_sizes) - 1)]
         self.biases = [np.zeros((layer_sizes[i + 1], 1)) for i in range(len(layer_sizes) - 1)]
-
- def relu(self, Z):
+    #FONCTIONS D'ACTIVATION
+    def relu(self, Z):
         return np.maximum(0, Z)
-def relu_derivative(self, Z):
+    def relu_derivative(self, Z):
         return (Z > 0).astype(float)
 
-def sigmoid(self, Z):
+    def sigmoid(self, Z):
         return 1 / (1 + np.exp(-Z))
-def sigmoid_derivative(self, Z):
+    def sigmoid_derivative(self, Z):
         return self.sigmoid(Z) * (1 - self.sigmoid(Z))
-
+    #PROPAGATION AVANT
     def forward_propagation(self, X):
         A = X.T  
         activations = [A]  
         zs = [] 
- for i in range(len(self.weights)):
+        for i in range(len(self.weights)):
             Z = np.dot(self.weights[i], A) + self.biases[i]
+            zs.append(Z)
             if i == len(self.weights) - 1:  
                 A = self.sigmoid(Z)  
             else:
@@ -48,26 +49,27 @@ def sigmoid_derivative(self, Z):
             activations.append(A)
 
         return A, activations, zs
-#RÉTROPROPAGATION & ENTRAÎNEMENT
-  def backward_propagation(self, X, y, activations, zs):
+    #RÉTROPROPAGATION & ENTRAÎNEMENT
+    def backward_propagation(self, X, y, activations, zs):
         m = y.shape[0]
         grads_w = [np.zeros(w.shape) for w in self.weights]
         grads_b = [np.zeros(b.shape) for b in self.biases]
-# Calcul de l'erreur en sortie 
+
+        # Calcul de l'erreur en sortie 
         A_final = activations[-1]
         delta = A_final - y.T  # Erreur (dernière couche)
         grads_w[-1] = np.dot(delta, activations[-2].T) / m
         grads_b[-1] = np.mean(delta, axis=1, keepdims=True)
 
-# Rétropropagation sur les couches cachées
+        # Rétropropagation sur les couches cachées
         for l in range(len(self.weights) - 2, -1, -1):
             delta = np.dot(self.weights[l + 1].T, delta) * self.activation_derivative(zs[l])
             grads_w[l] = np.dot(delta, activations[l].T) / m
             grads_b[l] = np.mean(delta, axis=1, keepdims=True)
 
         return grads_w, grads_b
-
-def update_parameters(self, grads_w, grads_b):
+    
+    def update_parameters(self, grads_w, grads_b):
         for i in range(len(self.weights)):
             self.weights[i] -= self.learning_rate * grads_w[i]
             self.biases[i] -= self.learning_rate * grads_b[i]
@@ -83,22 +85,23 @@ def update_parameters(self, grads_w, grads_b):
                 print(f"Epoch {epoch}: Loss = {loss:.5f}")
 
 
-# ======== TEST DU MLP ========
+# ****TEST DU MLP****
 if __name__ == "__main__":
     mlp = MLP([3, 5, 3, 1], activation='relu', learning_rate=0.01)
 
- # Entraînement du réseau
+    # Entraînement du réseau
     mlp.train(X, y, epochs=1000)
 
     output, activations = mlp.forward_propagation(X)
 
-print("Min:", np.min(output))
-print("Max:", np.max(output))
-print("Mean:", np.mean(output))
-print("Sortie du réseau (premiers 10 résultats) :")
-print(output[:, :10])  
+    print("Min:", np.min(output))
+    print("Max:", np.max(output))
+    print("Mean:", np.mean(output))
+    print("Sortie du réseau (premiers 10 résultats) :")
+    print(output[:, :10])  
 
-if __name__ == "__main__":
+    print("XOR :")
+
     #Définition des données XOR
     X_xor = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
     y_xor = np.array([[0], [1], [1], [0]])  
